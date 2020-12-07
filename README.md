@@ -1,9 +1,9 @@
 # Snowtricks
 
-## Introduction :
+## Introduction
 Un projet web concret permettant de se familiariser avec les outils et les concepts de développement proposés par le framework Symfony.
 
-## Pages requises :
+## Pages requises
     * Accueil - Liste des figures
     * Formulaire de connection
     * Formulaire d'inscription
@@ -14,7 +14,7 @@ Un projet web concret permettant de se familiariser avec les outils et les conce
     * fenêtre modale de confirmation de suppression de figure
     * fenêtre modale d'upload d'images
 
-## Base de données :
+## Base de données
     * Trick : table des figures
     * User : table des comptes utilisateur
     * Category : table des groupes de figure
@@ -22,7 +22,7 @@ Un projet web concret permettant de se familiariser avec les outils et les conce
     * Image : table des informations liées aux images
     * Video : table des urls externes des vidéos
 
-## Concepts à connaître :
+## Concepts à connaître
     * Injection de dépendances
     * Logique Métier
     * Routing sous Symfony
