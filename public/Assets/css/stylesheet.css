@@ -31,20 +31,16 @@ html {
   font-size: 3rem;
 }
 
-.fa-arrow-circle-down:hover, .fa-arrow-circle-up:hover {
+.fa-arrow-circle-down:hover,
+.fa-arrow-circle-up:hover {
   color: #070707;
-  transition: color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out,
-  border-color 0.15s ease-in-out,
-  box-shadow 0.15s ease-in-out,
-  -webkit-box-shadow 0.15s ease-in-out;;
+  transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out,
+      -webkit-box-shadow 0.15s ease-in-out;
 }
-
-/*.scroll {
-
-  position: absolute;
-  right: 0;
-}*/
 
 .landing-banner a.scroll {
   bottom: 50px;
@@ -61,26 +57,12 @@ button.scroll:focus {
   background-repeat: no-repeat;
 }
 
-.trick-title {
-/*  text-align: center;
-  display: inline;
-  vertical-align: middle;
-  position: absolute;
-  left: 0; right: 0;bottom: 20rem;
-  color: #FFF;
-  z-index: 1;
-  margin: auto;*/
-}
-
 .opaque {
   background-color: #fff;
 }
 
 .tchat-form {
-  padding-left: 4rem;
-  padding-right: 4rem;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding: 2rem 4rem 1rem 4rem;
   border-bottom: 1px solid black;
   border-top: 1px solid black;
 }
@@ -130,7 +112,7 @@ button.scroll:focus {
 }
 
 .card-img-overlay {
-  background-color: rgba(25,25,25,0.3);
+  background-color: rgba(25, 25, 25, 0.3);
 }
 
 label.required:before {
@@ -141,6 +123,3 @@ label.required:before {
 .extra-info {
   color: #1a82ae;
 }
-
-
-
