@@ -5,10 +5,7 @@ namespace App\Controller;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
@@ -40,18 +37,11 @@ class HomeController extends AbstractController
      *
      * @Route("/home/ajax/{page}", name="ajax_load", requirements={"page"="\d+"})
      * @param int $page
-     * @param Request $request
      * @param TrickRepository $trickRepository
      * @return JsonResponse
      */
-    public function ajaxLoad(int $page, Request $request, TrickRepository $trickRepository):JsonResponse
+    public function ajaxLoad(int $page, TrickRepository $trickRepository):JsonResponse
     {
-/*        if(!$request->isXmlHttpRequest())
-        {
-            $routeName = $request->attributes->get('_route');
-            throw new BadRequestHttpException("The route '".$routeName."' must be an XML or JSON HTTP request.");
-        }*/
-
         $tricks = $trickRepository->findAndPaginate($page, $this->getParameter("maxPerPage"));
 
         $tricksTemplate = $this->renderView('home/blocks/thumbnail.html.twig', [

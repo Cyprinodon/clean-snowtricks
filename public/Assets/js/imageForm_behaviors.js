@@ -4,15 +4,15 @@
 (($, formBuilder, BehavioralManager) => {
     //Attente du chargement du DOM.
      $(document).ready(() => {
-         let entities = ['image', 'video'];
+         let entities = ["image", "video"];
 
-         for(let i = 0; i < entities.length; i++) {
-             let collection = $(`.${entities[i]}s .form-collection`);
+         entities.forEach((entity) => {
+             let collection = $(`.${entity}s .form-collection`);
 
-             let manager = new BehavioralManager(collection, formBuilder, entities[i]);
+             let manager = new BehavioralManager(collection, formBuilder, entity);
 
              manager.addForm();
              manager.removeForm();
-         }
+         });
      });
 })(jQuery, FormBuilderModule, BehavioralManager);

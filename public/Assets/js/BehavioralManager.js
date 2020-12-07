@@ -3,20 +3,20 @@
 const BehavioralManager = function(parent, formBuilder, entity) {
     this.builder = formBuilder;
     this.parent = parent;
-    this.formSelector = '.' + entity + '-form';
-}
+    this.formSelector = "." + entity + "-form";
+};
 
 // Fonction chargée d'ajouter un formulaire d'image à la collection.
 BehavioralManager.prototype.addForm = function addEntityForm() {
     let addButton = this.builder.buildButton("Ajouter", "add-button");
     this.parent.append(addButton);
 
-    this.parent.data('index', this.parent.find(this.formSelector).length);
+    this.parent.data("index", this.parent.find(this.formSelector).length);
 
-    addButton.on('click', () => {
+    addButton.on("click", () => {
         let form = this.builder.buildForm(this.parent, addButton);
         this.attachRemoveButton(form);
-        form.find('input[required]:first').focus();
+        form.find("input[required]:first").focus();
     });
 };
 
@@ -25,7 +25,6 @@ BehavioralManager.prototype.removeForm = function removeEntityForm() {
     this.parent.find(this.formSelector).each(
         (index, element) => {
             let form = $(element);
-            console.log(form);
             this.attachRemoveButton(form);
         });
 };
@@ -36,8 +35,8 @@ BehavioralManager.prototype.attachRemoveButton = function attachRemoveButton(for
 
     form.append(removeButton);
 
-    removeButton.on('click', () => {
+    removeButton.on("click", () => {
         form.remove();
-        this.parent.data('index', this.parent.find(this.formSelector).length);
+        this.parent.data("index", this.parent.find(this.formSelector).length);
     });
 }

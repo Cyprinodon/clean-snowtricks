@@ -5,21 +5,21 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
 (($) => {
 
     //Installation de l'écouteur d'événement sur le bouton
-    $('#load_more').on("click",event => {
+    $("#load_more").on("click",(event) => {
         let message = "";
 
         // Récupération du conteneur devant recevoir les miniatures
         let container = $("#tricks_container");
         // Initialisation des attributs data
         let ajaxUrl = container.data("path"); // Chemin du fichier à récupérer
-        let page = parseInt(container.data("page")); // Numéro de page
-        let maxPages = parseInt(container.data("max-pages")); // Nombre de pages existantes
+        let page = parseInt(container.data("page"), 10); // Numéro de page
+        let maxPages = parseInt(container.data("max-pages"), 10); // Nombre de pages existantes
         // Initialisation du numéro de page suivant la page courante
         let nextPage = page + 1;
 
         //Fonction chargée d'envoyer un message d'erreur si la requête Ajax échoue.
         const sendErrorMessage = (xhr, status, error) => {
-            let errorBag = $('#load_error');
+            let errorBag = $("#load_error");
 
             // Si le conteneur d'erreur n'existe pas encore, on l'ajoute.
             if(!errorBag.length) {
@@ -28,7 +28,7 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
                     "soit parce qu'une erreur est survenue au moment de la requête.</p>";
                 container.append(message);
             }
-            console.log(`Error: ${error}`);
+            console.error(`Error: ${error}`);
         };
 
         //Fonction chargée d'afficher la page de figures suivante.
@@ -38,22 +38,20 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
 
             // Intégration dans le DOM des miniatures récupérées
             let thumbnails = $(data.template);
-            /*thumbnails.hide();*/
             container.append(thumbnails);
-            /*thumbnails.fadeIn("slow");*/
-            console.log("maxpages : " + nextPage);
+
             // Désactivation du bouton lorsque la dernière page a été atteinte
             if (nextPage >= maxPages) {
                 let button = $(event.currentTarget);
-                button.textContent = "fini !"
+                button.textContent = "fini !";
                 message = "<p>Toutes les figures ont été chargées.</p>";
                 button.hide();
                 button.replaceWith(message).fadeTo(4000, );
             }
 
             //Défilement jusqu'au nouveau contenu ajouté
-            $('html, body').animate({scrollTop: $(document).height()}, 100);
-        }
+            $("html, body").animate({scrollTop: $(document).height()}, 100);
+        };
 
         // Préparation de la requête.
         let jsonRequest = {
