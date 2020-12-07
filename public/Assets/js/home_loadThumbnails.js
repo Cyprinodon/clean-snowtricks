@@ -43,7 +43,7 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
             // Désactivation du bouton lorsque la dernière page a été atteinte
             if (nextPage >= maxPages) {
                 let button = $(event.currentTarget);
-                button.textContent = "fini !"
+                button.textContent = "fini !";
                 message = "<p>Toutes les figures ont été chargées.</p>";
                 button.hide();
                 button.replaceWith(message).fadeTo(4000, );
