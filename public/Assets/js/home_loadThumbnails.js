@@ -5,7 +5,7 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
 (($) => {
 
     //Installation de l'écouteur d'événement sur le bouton
-    $("#load_more").on("click",event => {
+    $("#load_more").on("click",(event) => {
         let message = "";
 
         // Récupération du conteneur devant recevoir les miniatures
@@ -50,7 +50,7 @@ lorsque l'utilisateur clique sur le bouton 'load_more'. */
             }
 
             //Défilement jusqu'au nouveau contenu ajouté
-            $('html, body').animate({scrollTop: $(document).height()}, 100);
+            $("html, body").animate({scrollTop: $(document).height()}, 100);
         };
 
         // Préparation de la requête.

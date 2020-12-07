@@ -4,7 +4,7 @@ const BehavioralManager = function(parent, formBuilder, entity) {
     this.builder = formBuilder;
     this.parent = parent;
     this.formSelector = "." + entity + "-form";
-}
+};
 
 // Fonction chargée d'ajouter un formulaire d'image à la collection.
 BehavioralManager.prototype.addForm = function addEntityForm() {
@@ -25,7 +25,6 @@ BehavioralManager.prototype.removeForm = function removeEntityForm() {
     this.parent.find(this.formSelector).each(
         (index, element) => {
             let form = $(element);
-            console.log(form);
             this.attachRemoveButton(form);
         });
 };

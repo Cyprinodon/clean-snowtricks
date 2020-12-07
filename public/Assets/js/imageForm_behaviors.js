@@ -6,13 +6,13 @@
      $(document).ready(() => {
          let entities = ["image", "video"];
 
-         entities.forEach(entity => {
+         entities.forEach((entity) => {
              let collection = $(`.${entity}s .form-collection`);
 
              let manager = new BehavioralManager(collection, formBuilder, entity);
 
              manager.addForm();
              manager.removeForm();
-         })
+         });
      });
 })(jQuery, FormBuilderModule, BehavioralManager);
