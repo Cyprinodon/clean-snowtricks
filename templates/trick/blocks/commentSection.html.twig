@@ -1,0 +1,32 @@
+<h3 class="col-8 mt-5 text-center">Espace de discussion</h3>
+{# Formulaire de discussion pour les utilisateurs connectés #}
+{% if is_granted('ROLE_USER') %}
+    <div class="col-8 mb-5">
+
+            {{ form_start(comment_form) }}
+            {{ form_row(comment_form.content, { 'label': "Laissez un commentaire..." }) }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary col-auto">Envoyer</button>
+            </div>
+        {{ form_end(comment_form) }}
+    </div>
+{% endif %}
+{# Cas où la figure ne contient aucun commentaire #}
+{% if trick.messages.count == 0 %}
+    <div class="col-8 my-5 text-center">
+        <p>Personne n'a laissé de commentaire pour le moment.</p>
+    </div>
+{% else %}
+{# Liste des messages précédemment postés #}
+    {% for message in trick.messages %}
+        <div class="col-8 tchat p-3 mb-3 mx-3">
+            <div class="row">
+                <p class="meta author col-auto">Posté par <span class="badge badge-dark">{{ message.user.username }}</span></p>
+                <p class="meta creation-date col-auto">Écrit le <span class="badge badge-dark">{{ message.createdAt | date("m/d/Y \\à H:i") }}</span></p>
+            </div>
+            <div class="row">
+                <p class="col-auto">{{ message.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

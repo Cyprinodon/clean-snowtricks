@@ -1,0 +1,42 @@
+{% extends 'frame.html.twig' %}
+
+{% block title %} - La passion du snow !{% endblock %}
+
+{% block modals %}
+    {# Modale permettant la suppression de figures #}
+    {% include 'home/modals/delete.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    {# Image d'en-tête de la page d'accueil #}
+    {% include 'home/blocks/banner.html.twig' %}
+    {# Messages flash de confirmation #}
+    {% include 'blocks/flashMessages.html.twig' %}
+    {# Grille de figures miniatures #}
+    <div class="col-auto">
+        <div class="tricks-container row py-5" id="tricks_container"
+             data-page="{{ page }}"
+             data-path="{{ path("ajax_load", {"page":page + 1}) }}"
+             data-max-pages="{{ max_pages }}">
+            {% include 'home/blocks/thumbnail.html.twig' %}
+        </div>
+    </div>
+
+    {# Bouton de chargement dynamique des miniatures #}
+    <div class="col-auto d-flex flex-row justify-content-center">
+        <button id="load_more" class="btn btn-primary">Load more</button>
+    </div>
+
+    {# Bouton permettant de remonter au début de la page #}
+    <div class="col-auto d-flex flex-row justify-content-end">
+        <a class="scroll" href="#bookmark_top"><i class="fas fa-arrow-circle-up"></i></a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {# script permettant le chargement asynchrone des miniatures #}
+    <script src="{{ asset(js_path ~ '/home_loadThumbnails.js') }}"></script>
+
+    {# Script permettant l'affichage et l'exécution de la fenêtre modale #}
+    <script src="{{ asset(js_path ~ '/modal_delete.js') }}"></script>
+{% endblock %}

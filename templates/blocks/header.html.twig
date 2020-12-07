@@ -1,0 +1,72 @@
+{# Header et menu de la page #}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+        {# Logotype/Marque #}
+        <a class="navbar-brand" href="{{ path('home') }}">
+            Snowtricks
+        </a>
+
+        {# Interrupteur de navigation sur mobile #}
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {# Navigation principale #}
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav mr-auto">
+
+                {# Lien vers la page d'accueil #}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('home') }}">
+                        Liste des figures
+                    </a>
+                </li>
+
+                {# Lien vers la gestion des groupes #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('category_index') }}">
+                        Liste des groupes
+                    </a>
+                </li>
+
+                {# Liens utilisateurs si connectés #}
+                {% if is_granted('ROLE_USER') %}
+                    {# Lien vers le formulaire d'ajout de figure #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('trick_new') }}">
+                            Ajouter une figure
+                        </a>
+                    </li>
+
+                    {# Lien activant le script de déconnection #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            Se déconnecter
+                        </a>
+                    </li>
+                {% else %}
+
+                    {# Lien vers le formulaire de connection #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">
+                            Se connecter
+                        </a>
+                    </li>
+                {% endif %}
+
+                {# Lien vers le formulaire d'inscription #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

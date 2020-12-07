@@ -1,0 +1,39 @@
+{% if trick.images.first %}
+    {% set featured_image = trick.images.first %}
+    {% set featured_url = images_path ~ '/' ~ featured_image.filename ~ "." ~ featured_image.extension %}
+{% else %}
+    {% set featured_image = '' %}
+    {% set featured_url = '' %}
+{% endif %}
+
+<div class="row justify-content-center no-gutters">
+    <div class="col-8 mb-4 trick-header">
+        <div class="card embed-responsive embed-responsive-16by9 text-white border-0 trick-header">
+            {% if featured_image %}
+                <img src="{{ asset(featured_url) }}"
+                     class="card-img embed-responsive-item featured-image"
+                     alt="{{ featured_image.alt }}"
+                     {% if featured_image.title != null %}title="{{ featured_image.title }}"{% endif %}>
+            {% endif %}
+            <div class="row card-img-overlay embed-responsive-item justify-content-center align-items-center no-gutters">
+                <h2 class="card-title trick-title">{{ trick.name }}</h2>
+            </div>
+        </div>
+    </div>
+{# Galleries d'images et vidéos associés à la figure #}
+    <div class="col-8">
+        <div class="row media-gallery ">
+            {% for image in trick.images %}
+                {% set image_url = images_path ~ '/' ~ image.filename ~ '.' ~ image.extension %}
+                <div class="col-3 embed-responsive embed-responsive-16by9">
+                    <img src="{{ asset(image_url) }}" class="col embed-responsive-item" alt="{{ image.alt }}" {% if image.title != null %}title="{{ image.title }}"{% endif %}>
+                </div>
+            {% endfor %}
+            {% for video in trick.videos %}
+                <div class="col-3 embed-responsive embed-responsive-16by9">
+                    <object class="col embed-responsive-item" data="http://www.youtube.com/embed/W7qWa52k-nE"></object>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

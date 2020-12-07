@@ -1,0 +1,41 @@
+{# Modèle de fenêtre modale pour la suppression de figure #}
+<div class="modal" tabindex="-1" id="modal_delete" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      {# Contenu d'en-tête de la fenêtre #}
+      <div class="modal-header">
+        <h5 class="modal-title">Attention !</h5>
+        <button 
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      {# Corps de la fenêtre #}
+      <div class="modal-body">
+        <p>Vous vous apprêtez à <span class="font-weight-blod">supprimer</span> 
+          un élément présent en base de données, êtes vous certain de vouloir 
+          faire cela ? Une fois cette action confirmée vous ne pourrez plus 
+          revenir en arrière.</p>
+      </div>
+
+      {# Pied-de-page #}
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">
+          Annuler
+        </button>
+        <a 
+          href="#"
+          id="confirmDelete"
+          class="btn btn-primary"
+          title="Supprimer la figure">
+          Confirmer
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

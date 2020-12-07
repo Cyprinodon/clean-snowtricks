@@ -1,0 +1,13 @@
+{% set prototype = form.videos.vars.prototype %}
+
+<div class="col form-collection mt-5" data-prototype="{{ form_widget(prototype)|e('html_attr') }}">
+    <h3>Collection de vidéos</h3>
+    <p class="alert-info">Rappel: seuls les liens de video embeded Youtube sont pris en charge.</p>
+    {% for video_form in form.videos %}
+        <div class="video-form">
+            <div class="row">
+                <div class="col">{{ form_row(video_form.url) }}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,21 @@
+{% set prototype = form.images.vars.prototype %}
+
+{# Collection de formulaires d'images #}
+<div class="col form-collection" data-prototype="{{ form_widget(prototype)|e('html_attr') }}">
+    <h3 class="mt-5">Collection d'images</h3>
+    {% for image_form in form.images %}
+        <div class="image-form">
+            <div class="row">
+                <div class="col">{{ form_row(image_form.file) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(image_form.alt) }}</div>
+                <div class="col">{{ form_row(image_form.title) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(image_form.height) }}</div>
+                <div class="col">{{ form_row(image_form.width) }}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

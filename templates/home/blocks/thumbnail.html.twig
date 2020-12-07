@@ -1,0 +1,40 @@
+{# modèle de miniature pour les figures sur la page d'accueil #}
+{% for trick in tricks %}
+    <article class="trick-preview col-md-4 col-lg-3">
+
+        {# Affichage de la première image de l'article comme image de garde #}
+        {% for image in trick.images %}
+            {% if loop.index == 1 %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <img src="{{ asset('Assets/images/' ~ image.filename ~ "." ~ image.extension) }}"
+                         class="embed-responsive-item img-thumbnail" alt="{{ image.alt }}"
+                            {% if image.title != null %}title="{{ image.title }}"{% endif %}>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {# Section du titre et interface de gestion #}
+        {% if is_granted('ROLE_USER') %}
+            <div class="row justify-content-between">
+        {%  endif %}
+            {# Titre #}
+            {% include 'home/blocks/thumbnailTitle.html.twig' %}
+        {% if is_granted('ROLE_USER') %}
+            <div class="col-auto">
+                {# Éditer une figure #}
+                <a href="{{ path('trick_edit', {'slug': trick.slug}) }}">
+                    <i class="fas fa-pen"></i>
+                </a>
+                {# Supprimer une figure #}
+                <a href="" class="remove-button"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modal_delete"
+                        data-controller-path="{{ path('trick_delete', {'slug': trick.slug}) }}">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </article>
+{% endfor %}

@@ -1,0 +1,52 @@
+{% extends 'frame.html.twig' %}
+
+{% block body_class %}
+    class="banner-bg"
+{% endblock %}
+
+{% block modals %}
+    {% include "home/modals/delete.html.twig" %}
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center no-gutters">
+        <article class="col-auto trick">
+            {# En-tête de la figure contenant l'image de garde et le titre #}
+            {% include 'trick/blocks/trickHeader.html.twig' %}
+            {# Formulaire d'édition des données de la figure #}
+             <div class="row trick-content justify-content-center mt-4">
+                <h2>Édition de la figure</h2>
+                 {#{% form_theme form '_imageForm.html.twig' %}#}
+                {{ form_start(form, {'method': 'POST', 'attr': {'class': "col-10 pb-3"}}) }}
+                <div class="row">
+                    <div class="col">{{ form_row(form.name) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col">{{ form_row(form.description, {'attr': {'rows': "10"}}) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-4">{{ form_row(form.category) }}</div>
+                </div>
+                <div class="row images">
+                  {% include 'trick/blocks/imageFormCollection.html.twig' %}
+                </div>
+                <div class="row videos">
+                  {% include 'trick/blocks/videoFormCollection.html.twig' %}
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary">Modifier la figure</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </article>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/modal_delete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset(js_path ~ '/formBuilder.js') }}"></script>
+    <script type="text/javascript" src="{{ asset(js_path ~ '/BehavioralManager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset(js_path ~ '/imageForm_behaviors.js') }}"></script>
+{% endblock %}

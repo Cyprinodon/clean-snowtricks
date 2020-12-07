@@ -1,0 +1,33 @@
+{% extends 'frame.html.twig' %}
+
+{% block body_class %}
+    class="banner-bg"
+{% endblock %}
+
+{% block body %}
+    <article class="trick">
+        {# En-tête de la figure #}
+        {% include 'trick/blocks/trickHeader.html.twig' %}
+        {# Corps de la figure #}
+        <div class="row justify-content-center no-gutters">
+            <div class="col-8 mt-4 trick-content">
+                {# Messages flash #}
+                {% include 'blocks/flashMessages.html.twig' %}
+                {# Description de la figure #}
+                <div class="row">
+                    <p class="col-auto px-5">{{ trick.description }}</p>
+                </div>
+                {# Métadonnées de la figure #}
+                <div class="row metadata justify-content-around">
+                    <p class="col-auto">Écrit le <span class="badge badge-info">{{ trick.createdAt | date("m/d/Y \\à H:i") }}</span></p>
+                    <p class="col-auto">Par <span class="badge badge-info">{{trick.user.username}}</span></p>
+                    <p class="col-auto">Dans la catégorie <span class="badge badge-info">{{ trick.category.name }}</span></p>
+                </div>
+            </div>
+        </div>
+        {# Commentaires associés à la figure #}
+        <div class="row tchat-section justify-content-center no-gutters">
+            {% include 'trick/blocks/commentSection.html.twig' %}
+        </div>
+    </article>
+{% endblock %}

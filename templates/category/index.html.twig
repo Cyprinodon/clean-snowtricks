@@ -1,0 +1,45 @@
+{% extends 'frame.html.twig' %}
+
+{% block title %} - Liste des groupes{% endblock %}
+{% block modals %}
+    {% include 'category/modals/modal_categoryDelete.html.twig' %}
+{% endblock %}
+
+
+{% block body %}
+    {% include 'blocks/flashMessages.html.twig' %}
+    <div class="category-container row px-3 py-5" id="category_container" data-path="category_add_ajax">
+        <div class="col">
+            <h2>Groupes de figures</h2>
+            {# Bouton d'ajout de groupe pour les utilisateurs connectés #}
+            {% if is_granted('ROLE_USER') %}
+                <div class="row">
+                    <a href="{{ path('category_new') }}" class="btn page-link" type="button">
+                        <i class="fa fa-plus" title="Ajouter un groupe"></i> Ajouter un groupe
+                    </a>
+                </div>
+            {% endif %}
+            <ul class="row">
+                {# Liste des groupes #}
+                {% for category in categories %}
+                    <li class="col-3">
+                        {{ category.name }} <span class="extra-info">({{ category.tricks|length }} figures)</span>
+                        {% if is_granted('ROLE_USER') %}
+                            {# Supprimer un groupe #}
+                            <a href="" class="remove-button" type="button"
+                                    data-toggle="modal"
+                                    data-target="#modal_category_delete"
+                                    data-controller-path="{{ path('category_delete', {'id': category.id}) }}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset(js_path ~ '/modal_delete.js') }}"></script>
+{% endblock %}

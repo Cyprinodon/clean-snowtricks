@@ -1,0 +1,11 @@
+{% extends 'formWrapper.html.twig' %}
+
+{% block title %} - Ajouter un groupe{% endblock %}
+
+{% block form %}
+    <h1>Ajouter un groupe</h1>
+
+    {{ include('category/_form.html.twig') }}
+
+    <a href="{{ path('category_index') }}">retourner à la liste des groupes</a>
+{% endblock %}
