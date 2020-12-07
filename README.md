@@ -1,5 +1,7 @@
 # Snowtricks
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/353ed4823208445680e93f743229d5fc)](https://app.codacy.com/gh/Cyprinodon/clean-snowtricks?utm_source=github.com&utm_medium=referral&utm_content=Cyprinodon/clean-snowtricks&utm_campaign=Badge_Grade)
+
 ## Introduction
 Un projet web concret permettant de se familiariser avec les outils et les concepts de développement proposés par le framework Symfony.
 
