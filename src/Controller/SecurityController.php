@@ -6,6 +6,7 @@ use App\Form\PasswordResetType;
 use App\Repository\UserRepository;
 use App\Services\EmailManager;
 use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,7 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
     /**
@@ -60,18 +61,26 @@ class SecurityController extends AbstractController
             $username = $user->getUsername();
 
             $user = $userRepository->findOneBy(['username' => $username]);
+            $successful = true;
 
             //Vérifier que l'utilisateur existe avant d'envoyer le message
             if($user != null) {
                 $token = new CsrfToken($username, $user->getId().uniqid());
-
                 try {
                     $emailManager->sendPasswordReset($user->getEmail(), $token, $user);
                 } catch(TransportException $error) {
-                    $this->addFlash('danger', "SendGrid refuse encore et toujours d'envoyer ces damnés messages : ".$error->getMessage());
+
+                    $this->addFlash('danger', "Une erreur est survenue lors de l'envoi de votre message. Contactez l'administrateur du site pour résoudre cette issue.");
+                    $successful = false;
                 }
+            } else {
+                $successful = false;
             }
-            $this->addFlash('success', "Votre demande de mot de passe a bien été prise en compte. Si ce nom d'utilisateur existe, un lien a été envoyé à l'adresse e-mail associée.");
+
+            if($successful)
+            {
+                $this->addFlash('success', "Votre demande de mot de passe a bien été prise en compte. Si ce nom d'utilisateur existe, un lien a été envoyé à l'adresse e-mail associée.");
+            }
             return $this->redirectToRoute('home');
         }
         return $this->render('security/passwordResetAsk.html.twig', [
@@ -93,10 +102,10 @@ class SecurityController extends AbstractController
         EntityManagerInterface $entityManager,
         PasswordEncoderInterface $passwordEncoder): Response
     {
-        if(!$this->isCsrfTokenValid($token->getId(), $token->getValue()))
+/*        if(!$this->isCsrfTokenValid($token->getId(), $token->getValue()))
         {
             return $this->redirectToRoute("link_expired");
-        }
+        }*/
 
         $user = $entityManager
             ->getRepository(User::class)
