@@ -6,14 +6,11 @@ use App\Entity\Message;
 use App\Entity\Trick;
 use App\Form\MessageType;
 use App\Form\TrickType;
-use App\Repository\TrickRepository;
 use App\Services\Slugger;
 use App\Services\Uploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +46,7 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            return $this->redirectToRoute('trick_show', [ 'id' => $trick->getId() ]);
+            return $this->redirectToRoute('trick_show', [ 'slug' => $trick->getSlug() ]);
         }
 
         return $this->render('trick/new.html.twig', [
@@ -122,7 +119,6 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $images = $form->get('images');
-            dump($images);
             $videos = $form->get('videos');
 
             // Assurer l'intégrité de la base de données.
