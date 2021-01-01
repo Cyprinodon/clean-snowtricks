@@ -26,7 +26,7 @@ class Slugger
     public function slug(string $input) : string
     {
         $output = preg_replace("/[.,]/", '', $input);
-        $output = preg_replace("/[/_|+ \-']+/", '-', $output);
+        $output = preg_replace("/[\/_|+ \-']+/", '-', $output);
         $output = $this->normalize($output);
         $output = strtolower($output);
         $output = trim($output);
