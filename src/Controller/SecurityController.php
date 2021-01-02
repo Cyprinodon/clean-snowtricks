@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Form\UsernameType;
@@ -47,10 +47,15 @@ class SecurityController extends AbstractController
      * @Route("/connexion/demander-changement/mot-de-passe", name="password_reset")
      * @param Request $request
      * @param UserRepository $userRepository
+     * @param EntityManagerInterface $entityManager
      * @param EmailManager $emailManager
      * @return Response
      */
-    public function passwordReset_ask(Request $request, UserRepository $userRepository, EmailManager $emailManager): Response
+    public function passwordReset_ask(
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        EmailManager $emailManager): Response
     {
         $form = $this->createForm(UsernameType::class);
         $form->handleRequest($request);
@@ -61,19 +66,25 @@ class SecurityController extends AbstractController
             $username = $user->getUsername();
 
             $user = $userRepository->findOneBy(['username' => $username]);
-            $successful = true;
 
-            //Vérifier que l'utilisateur existe avant d'envoyer le message
-            if($user != null) {
-                $token = new CsrfToken($username, $user->getId().uniqid());
-                try {
-                    $emailManager->sendPasswordReset($user->getEmail(), $token, $user);
-                } catch(TransportException $error) {
+            if($user == null) {
+                $this->addFlash('danger', "L'utilisateur demandé n'a pas été trouvé");
+                return $this->redirectToRoute('home');
+            }
 
-                    $this->addFlash('danger', "Une erreur est survenue lors de l'envoi de votre message. Contactez l'administrateur du site pour résoudre cette issue.");
-                    $successful = false;
-                }
-            } else {
+            $token = new CsrfToken($username, $user->getId().uniqid());
+            $user->setToken($token);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            //Cette ligne de code n'existe que pour tester la modification de mot de passe en local (pas de serveur smtp)
+            return $this->redirectToRoute('password_reset_change', ["token" => $token]);
+
+            try {
+                $emailManager->sendPasswordReset($user->getEmail(), $token, $user);
+                $successful = true;
+            } catch(TransportException $error) {
+
+                $this->addFlash('danger', "Une erreur est survenue lors de l'envoi de votre message. Contactez l'administrateur du site pour résoudre cette issue.");
                 $successful = false;
             }
 
@@ -91,16 +102,16 @@ class SecurityController extends AbstractController
     /**
      * @Route("/connexion/changer/mot-de-passe/{token}", name="password_reset_change")
      * @param Request $request
-     * @param CsrfToken $token
+     * @param string $token
      * @param EntityManagerInterface $entityManager
-     * @param PasswordEncoderInterface $passwordEncoder
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
     public function passwordReset_change(
         Request $request,
-        CsrfToken $token,
+        string $token,
         EntityManagerInterface $entityManager,
-        PasswordEncoderInterface $passwordEncoder): Response
+        UserPasswordEncoderInterface $passwordEncoder): Response
     {
 /*        if(!$this->isCsrfTokenValid($token->getId(), $token->getValue()))
         {
@@ -109,19 +120,28 @@ class SecurityController extends AbstractController
 
         $user = $entityManager
             ->getRepository(User::class)
-            ->findOneBy(['username' => $token->getId()]);
+            ->findOneBy(['token' => $token]);
+
+        if($user == null)
+        {
+            $this->addFlash('danger', "Le jeton ne corresponds pas ou est périmé.");
+            return $this->redirectToRoute('home');
+        }
 
         $form = $this->createForm(PasswordResetType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $password = $form->getData();
-            $user->setPassword($passwordEncoder->encodePassword($password, $user->getSalt()));
+            $user->setPassword($passwordEncoder->encodePassword(
+                $user,
+                $form->get('password')->getData()
+            ));
+            $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('success', "Votre mot de passe a bien été réinitialisé.");
-            $this->redirectToRoute('home');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('security/passwordReset.html.twig',[
