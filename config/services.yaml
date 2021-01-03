@@ -37,3 +37,7 @@ services:
     App\Services\Uploader:
         arguments:
             $targetDirectory: '%images_directory%'
+
+    App\Services\ImageCollectionHydrater:
+        arguments:
+            $imageDirectory: '%images_directory%'
