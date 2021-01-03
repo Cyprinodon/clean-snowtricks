@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use \DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @UniqueEntity(fields={"name"}, message="Un groupe portant ce nom existe déjà. Choisissez-en un autre.")
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
 class Category
@@ -20,7 +23,7 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -56,12 +59,12 @@ class Category
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
