@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,7 +34,11 @@ class EmailManager
                 'username' => $user->getUsername(),
             ]);
 
-
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            dump($e);
+            die();
+        }
     }
 }

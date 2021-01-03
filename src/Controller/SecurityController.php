@@ -76,8 +76,6 @@ class SecurityController extends AbstractController
             $user->setToken($token);
             $entityManager->persist($user);
             $entityManager->flush();
-            //Cette ligne de code n'existe que pour tester la modification de mot de passe en local (pas de serveur smtp)
-            return $this->redirectToRoute('password_reset_change', ["token" => $token]);
 
             try {
                 $emailManager->sendPasswordReset($user->getEmail(), $token, $user);
