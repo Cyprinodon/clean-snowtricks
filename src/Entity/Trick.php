@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * A database entity which represents a trick.
  *
- * @UniqueEntity("name")
+ * @UniqueEntity(fields={"name"}, message="Une figure portant ce nom existe déjà. Choisissez-en un autre.")
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  */
 class Trick
@@ -29,7 +30,7 @@ class Trick
     /**
      * @var string $name The displayed name of a trick.
      * @Assert\NotBlank()
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -40,7 +41,7 @@ class Trick
     private $description;
 
     /**
-     * @var datetime $createdAt The time at which the trick was created/modified.
+     * @var Datetime $createdAt The time at which the trick was created/modified.
      * @ORM\Column(type="datetime")
      */
     private $createdAt;

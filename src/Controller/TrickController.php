@@ -6,9 +6,7 @@ use App\Entity\Message;
 use App\Entity\Trick;
 use App\Form\MessageType;
 use App\Form\TrickType;
-use App\Services\Slugger;
-use App\Services\Uploader;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Services\TrickHydrater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +27,18 @@ class TrickController extends AbstractController
      * @Route("/ajouter", name="trick_new", methods={"GET","POST"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @param Slugger $slugger
+     * @param TrickHydrater $trickHydrater
      * @return Response
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, Slugger $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TrickHydrater $trickHydrater): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick = $form->getData();
-            $trick->setUser($this->getUser());
-            $trick->setSlug($slugger->slug($trick->getName()));
-            $trick->setCreatedAt(new DateTime());
+
+            $trickHydrater->create($form, $trick, $this->getUser());
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -96,78 +92,20 @@ class TrickController extends AbstractController
      * @param Request $request
      * @param Trick $trick
      * @param EntityManagerInterface $entityManager
-     * @param Uploader $uploader
-     * @param Slugger $slugger
+     * @param TrickHydrater $trickHydrater
      * @return Response
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $entityManager, Uploader $uploader, Slugger $slugger): Response
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $entityManager, TrickHydrater $trickHydrater): Response
     {
-        $imagesWitness = new ArrayCollection();
-        $videosWitness = new ArrayCollection();
-        foreach($trick->getImages() as $image)
-        {
-            $imagesWitness->add($image);
-        }
-
-        foreach($trick->getVideos() as $video)
-        {
-            $videosWitness->add($video);
-        }
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('images');
-            $videos = $form->get('videos');
+            $trickHydrater->edit($form, $trick);
 
-            // Assurer l'intégrité de la base de données.
-            foreach($images as $image)
-            {
-                $imageEntity = $image->getData();
-                foreach($imagesWitness as $originalImage)
-                {
-                    // Si l'image a été retirée de l'entité, trouver l'entité image et la supprimer.
-                    if(!$trick->getImages()->contains($originalImage))
-                    {
-                        $entityManager->remove($originalImage);
-                        $path = $this->getParameter("images_directory").'/'
-                            .$originalImage->getFilename().'.'.$originalImage->getExtension();
-                        $uploader->remove($path);
-                    }
-                }
-
-                $imageFile = $image->get('file')->getData();
-                if($imageFile)
-                {
-                    $fileInfo = $uploader->upload($imageFile);
-                    
-                    $imageEntity->setExtension($fileInfo['extension']);
-                    $imageEntity->setFilename($fileInfo['filename']);
-                    $imageEntity->setCreatedAt(new DateTime());
-
-                    $entityManager->persist($imageEntity);
-                }
-            }
-
-            foreach($videos as $video)
-            {
-                $videoEntity = $video->getData();
-                foreach($videosWitness as $originalVideo)
-                {
-                    if(!$trick->getVideos()->contains($originalVideo))
-                    {
-                        $entityManager->remove($originalVideo);
-                    }
-                }
-                $videoEntity->setTrick($trick);
-                $entityManager->persist($videoEntity);
-            }
-            $trick->setSlug($slugger->slug($trick->getName()));
             $entityManager->persist($trick);
             $entityManager->flush();
-
-            $this->addFlash('success', "La modification de votre figure a bien été prise en compte.");
         }
 
         return $this->render('trick/edit.html.twig', [
