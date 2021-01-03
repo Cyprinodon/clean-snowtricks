@@ -37,8 +37,6 @@ class EmailManager
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            dump($e);
-            die();
         }
     }
 }
